@@ -1,0 +1,41 @@
+.notifications-container {
+  /* flex: 1; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90vh;
+  overflow-y: scroll;
+  background-color: rgb(168, 173, 182);
+}
+
+.notification-card {
+  background-color: rgb(232, 234, 237);
+  /* display: flex; */
+  /* align-items: center; */
+  padding: 12px;
+  width: 90%;
+  margin: 6px 4px;
+  height: auto;
+  border-radius: 12px;
+  position: relative;
+
+}
+
+.notification-closer {
+    background-color: rgb(168, 173, 182);
+    float: right;
+    color: red;
+    border-radius: 5px;
+    font-weight: bolder;
+}
+/* Hide scrolbar for chrome, safari and opera */
+.notifications-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrolbar for IE, Edge and Firefox */
+.notifications-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

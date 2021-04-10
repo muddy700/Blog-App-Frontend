@@ -3,6 +3,7 @@ import '../styles/navbar.css'
 import { Link } from "react-router-dom";
 import Tooltip from '@material-ui/core/Tooltip';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 export const Navbar = () => {
     return (
@@ -24,15 +25,20 @@ export const Navbar = () => {
                             <Link to="/myPosts" class="nav-link">My Posts</Link>
                         </li>
                     </ul>
-                    {/* <form class="d-flex"> */}
-                        <button class="btn btn-outline-danger">
-                        <Tooltip title="Logout" arrow> 
-                            <Link to="/login" style={{color: 'inherit'}}>
-                                <PowerSettingsNewIcon />
+                        <button class="btn btn-info" style={{backgroundColor: 'inherit', border: 'none'}}>
+                        <Tooltip title="Profile" arrow> 
+                            <Link to="/profile" >
+                                <AccountCircleIcon fontSize="large" />
                             </Link>
                         </Tooltip>
                         </button>
-                    {/* </form> */}
+                        <button class="btn btn-outline-danger"  style={{backgroundColor: 'inherit', border: 'none'}}>
+                        <Tooltip title="Logout" arrow> 
+                            <Link to="/login" style={{color: 'inherit'}}>
+                                <PowerSettingsNewIcon fontSize="large" />
+                            </Link>
+                        </Tooltip>
+                        </button>
                     </div>
                 </div>
             </nav>

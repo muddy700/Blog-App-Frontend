@@ -1,0 +1,52 @@
+.posts-container {
+    /* flex: 1; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90vh;
+    overflow-y: scroll;
+    background-color: rgb(168, 173, 182);
+}
+
+.post-card {
+    background-color: rgb(232, 234, 237);
+    /* display: flex; */
+    /* align-items: center; */
+    padding: 12px;
+    width: 90%;
+    margin: 6px 4px;
+    height: 200px;
+    border-radius: 12px;
+}
+
+.opened-post-card {
+  background-color: rgb(232, 234, 237);
+  /* display: flex; */
+  /* align-items: center; */
+  padding: 12px;
+  width: 90%;
+  margin: 6px 4px;
+  border-radius: 12px;
+  height: auto;
+}
+
+.post-body {
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+}
+.opened-post-body {
+  /* height: auto; */
+}
+
+/* Hide scrolbar for chrome, safari and opera */
+.posts-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrolbar for IE, Edge and Firefox */
+.posts-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

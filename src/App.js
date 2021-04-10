@@ -7,6 +7,9 @@ import {Notifications } from './components/notifications'
 import {PageNotFound } from './components/pageNotFound'
 import LoginPage from './components/loginPage';
 import SignUpPage from './components/signUpPage';
+import ForgotPasswordPage from './components/forgotPasswordPage';
+import Profile from './components/profile';
+import SinglePost from './components/singlePost';
 
 import {
     BrowserRouter as Router,
@@ -26,9 +29,20 @@ export const App = () => {
             <Route exact path="/signUp">
               <SignUpPage />
             </Route>
+            <Route exact path="/forgot-Password">
+              <ForgotPasswordPage />
+            </Route>
             <Route exact path="/myPosts">
               <Navbar />
               <MyPosts />
+            </Route>
+            <Route exact path="/profile">
+              <Navbar />
+              <Profile />
+            </Route>
+            <Route exact path="/postDetails">
+              <Navbar />
+              <SinglePost />
             </Route>
             <Route exact path="/notifications">
               <Navbar />
