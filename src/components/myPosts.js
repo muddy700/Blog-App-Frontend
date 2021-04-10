@@ -7,7 +7,11 @@ import { Link } from "react-router-dom";
 
 
 export const MyPosts = () => {
-    return (
+    return (<>
+        
+        <Link to="/post-form" className="links">
+            <Button color="primary" variant="contained">Add Post</Button>
+        </Link>
         <div className="posts-container">
             <div className="post-card">
                 <h5>Post Title Must Be As Long As The Text Comes From The Database</h5>
@@ -18,7 +22,7 @@ export const MyPosts = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post.
                         </Button>
@@ -34,7 +38,7 @@ export const MyPosts = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post.
                         </Button>
@@ -50,7 +54,7 @@ export const MyPosts = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post.
                         </Button>
@@ -66,7 +70,7 @@ export const MyPosts = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post.
                         </Button>
@@ -82,7 +86,7 @@ export const MyPosts = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post.
                         </Button>
@@ -90,6 +94,7 @@ export const MyPosts = () => {
                  </div>
             </div>
         </div>
+        </>
     )
 }
 

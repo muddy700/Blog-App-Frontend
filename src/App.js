@@ -10,12 +10,15 @@ import SignUpPage from './components/signUpPage';
 import ForgotPasswordPage from './components/forgotPasswordPage';
 import Profile from './components/profile';
 import SinglePost from './components/singlePost';
+import MyNotifications from './components/myNotifications';
 
 import {
     BrowserRouter as Router,
     Switch,
     Route,
 } from "react-router-dom";
+import PostForm from './components/postForm';
+import NotificationForm from './components/notificationForm';
 
 export const App = () => {
   return (
@@ -26,13 +29,13 @@ export const App = () => {
             <Route exact path="/login">
               <LoginPage />
             </Route>
-            <Route exact path="/signUp">
+            <Route exact path="/sign-up">
               <SignUpPage />
             </Route>
-            <Route exact path="/forgot-Password">
+            <Route exact path="/forgot-password">
               <ForgotPasswordPage />
             </Route>
-            <Route exact path="/myPosts">
+            <Route exact path="/my-posts">
               <Navbar />
               <MyPosts />
             </Route>
@@ -40,13 +43,25 @@ export const App = () => {
               <Navbar />
               <Profile />
             </Route>
-            <Route exact path="/postDetails">
+            <Route exact path="/post-details">
               <Navbar />
               <SinglePost />
             </Route>
             <Route exact path="/notifications">
               <Navbar />
               <Notifications />
+            </Route>
+            <Route exact path="/my-notifications">
+              <Navbar />
+              <MyNotifications />
+            </Route>
+            <Route exact path="/post-form">
+              <Navbar />
+              <PostForm />
+            </Route>
+            <Route exact path="/notification-form">
+              <Navbar />
+              <NotificationForm />
             </Route>
             <Route exact path="/">
               <Navbar />

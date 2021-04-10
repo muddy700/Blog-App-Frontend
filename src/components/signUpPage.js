@@ -108,7 +108,7 @@ export const SignUpPage = () => {
                 <Typography component="h1" variant="h5">
                     Sign Up Form
                 </Typography>
-                <form className={classes.form}  name="loginForm" noValidate={false} onSubmit={onFinish}>
+                <form className={classes.form}  name="loginForm" onSubmit={onFinish}>
                 <TextField
                     variant="outlined"
                     margin="normal"

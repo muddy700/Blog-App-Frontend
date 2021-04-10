@@ -18,7 +18,7 @@ export const PostList = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post
                         </Button>
@@ -34,7 +34,7 @@ export const PostList = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post
                         </Button>
@@ -50,7 +50,7 @@ export const PostList = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post
                         </Button>
@@ -66,7 +66,7 @@ export const PostList = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post
                         </Button>
@@ -82,7 +82,7 @@ export const PostList = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post
                         </Button>
@@ -98,7 +98,7 @@ export const PostList = () => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right'}}>
                             View Post
                         </Button>

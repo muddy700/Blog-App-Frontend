@@ -29,7 +29,7 @@ code {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: white;
+  /* background-color: white; */
   background-color: rgb(168, 173, 182);
   align-items: center;
 

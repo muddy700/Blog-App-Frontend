@@ -50,3 +50,15 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.new-message-card {
+  height: auto;
+  width: 100%;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  /* place-items: center; */
+  padding: 0 10%;
+}

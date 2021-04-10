@@ -6,9 +6,8 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
-
-
 export const SinglePost = () => {
+    
     let history = useHistory();
 
     const goToPreviousPage = () => {
@@ -38,7 +37,7 @@ export const SinglePost = () => {
                     <Button variant="contained" color="secondary" style={{float: 'right', margin: '0 5px'}}>
                         Delete
                     </Button>
-                    <Link to="/postDetails">
+                    <Link to="/post-details">
                         <Button variant="contained" color="primary" style={{float: 'right', margin: '0 5px'}}>
                             Edit
                         </Button>

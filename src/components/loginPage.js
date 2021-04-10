@@ -103,7 +103,7 @@ export const LoginPage = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form}  name="loginForm" noValidate={false} onSubmit={onFinish}>
+                <form className={classes.form}  name="loginForm" onSubmit={onFinish}>
                 <TextField
                     variant="outlined"
                     margin="normal"
@@ -149,7 +149,7 @@ export const LoginPage = () => {
                     </Grid>
                     <Grid item>
                     <Link href="#" variant="body2" className="links" >
-                        <Link to="/signUp" style={{color: 'inherit', textDecoration: 'none'}}> No Account ? SignUp </Link>
+                        <Link to="/sign-up" style={{color: 'inherit', textDecoration: 'none'}}> No Account ? SignUp </Link>
                     </Link>
                     </Grid>
                 </Grid>
