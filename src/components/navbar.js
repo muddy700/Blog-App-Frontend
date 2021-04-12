@@ -1,12 +1,30 @@
 import React from 'react'
 import '../styles/navbar.css'
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Tooltip from '@material-ui/core/Tooltip';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { SpaTwoTone } from '@material-ui/icons';
+import {logoutUser} from '../app/api'
 
 export const Navbar = () => {
+    const history = useHistory();
+
+    const endSession = async () => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            }
+        };
+
+        try {
+            // const response = await logoutUser(config)
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            history.push("/login")
+        } catch (err) { console.log('Logout Error : ' + err) }
+    }
+
     return (
             <nav class="navbar navbar-expand-sm navbar-dark bg-dark" style={{width: '100%'}}>
                 <div class="container-fluid">
@@ -48,11 +66,12 @@ export const Navbar = () => {
                             </Link>
                         </Tooltip>
                         </button>
-                        <button class="btn btn-outline-danger"  style={{backgroundColor: 'inherit', border: 'none'}}>
+                        <button 
+                            class="btn btn-outline-danger"  
+                            onClick={e => {e.preventDefault(); endSession()}}
+                            style={{backgroundColor: 'inherit', border: 'none'}}>
                         <Tooltip title="Logout" arrow> 
-                            <Link to="/login" style={{color: 'inherit'}}>
                                 <PowerSettingsNewIcon fontSize="large" />
-                            </Link>
                         </Tooltip>
                         </button>
                     </div>

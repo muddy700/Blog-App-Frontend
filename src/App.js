@@ -43,7 +43,7 @@ export const App = () => {
               <Navbar />
               <Profile />
             </Route>
-            <Route exact path="/post-details">
+            <Route exact path="/posts/:postId/details">
               <Navbar />
               <SinglePost />
             </Route>
@@ -55,7 +55,7 @@ export const App = () => {
               <Navbar />
               <MyNotifications />
             </Route>
-            <Route exact path="/post-form">
+            <Route exact path={["/posts/:id/edit", "/post-form"]}>
               <Navbar />
               <PostForm />
             </Route>

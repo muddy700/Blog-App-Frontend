@@ -1,6 +1,7 @@
 import {React, useState} from 'react'
 import '../styles/notifications.css'
 import { useHistory } from "react-router-dom";
+import {createNotification} from '../app/api'
 import {Card, TextField, Button, CardContent} from '@material-ui/core';
 
 export const NotificationForm = () => {
@@ -18,14 +19,26 @@ export const NotificationForm = () => {
 
     }
 
-    const onFinish = (e) => {
+    const onFinish = async (e) => {
         e.preventDefault();
-        console.log(notificationBody)
-        setnotificationBody('');
-        history.push('my-notifications')
+        const payload = {
+            sender: localStorage.getItem('userId'),
+            message: notificationBody
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}` } };
+                
+        try {
+            const response = await createNotification(payload, config)
+            history.push('my-notifications')
+            setnotificationBody('');
+        } catch (err) { console.log('Create Notification Error : ' + err)}
     }
 
     const IsFormValid = notificationBody !== '';
+
     return (
         <div className="notifications-container">
       <Card className="new-message-card">

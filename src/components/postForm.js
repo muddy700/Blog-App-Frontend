@@ -1,11 +1,14 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import '../styles/notifications.css'
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import {createPost, updatePost} from '../app/api'
+import {getSinglePost} from '../app/api'
 import {Card, TextField, Button, CardContent} from '@material-ui/core';
 
 export const PostForm = () => {
 
     let history = useHistory();
+    const {id} = useParams()
     const initialPost = {
         title: '',
         content: ''
@@ -14,6 +17,7 @@ export const PostForm = () => {
 
     const goToPreviousPage = () => {
         history.goBack()
+        setPostInfo(initialPost)
     }
 
     const handlePostForm = (e) => {
@@ -24,11 +28,49 @@ export const PostForm = () => {
 
     }
 
-    const onFinish = (e) => {
+    const fetchSinglePost = async (postId) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            }
+        };
+
+        try {
+            const postData = await getSinglePost(postId, config)
+            setPostInfo(postData)
+        } catch (err) {
+            console.log('Single Post Error : ' + err)
+        }
+    }
+
+    useEffect(() => {
+        fetchSinglePost(id);
+    }, [])
+
+    const onFinish = async (e) => {
         e.preventDefault();
-        console.log(postInfo)
-        setPostInfo(initialPost)
-        history.push('post-details')
+        const payload = {
+            author: localStorage.getItem('userId'),
+            title: postInfo.title,
+            content: postInfo.content,
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            }
+        };
+        
+        try {
+            let response;
+            if(id) { response = await updatePost(id, payload, config) }
+            else { response = await createPost(payload, config) }
+            setPostInfo(initialPost)
+            goToPreviousPage();
+        } catch (err) {
+            console.log('Create Or Update Post Error : ' + err)
+        }
     }
 
     const IsFormValid = postInfo.title !== '' && postInfo.content !== '';
@@ -38,7 +80,6 @@ export const PostForm = () => {
         <CardContent style={{textAlign: 'center'}} >
             <form 
                 name="messageForm" 
-                autoComplete
                 className="post-form"
                 onSubmit={onFinish}>
                 <TextField  
@@ -74,7 +115,7 @@ export const PostForm = () => {
                     color="primary" 
                     className="form-input"
                     disabled={!IsFormValid} 
-                    > Post </Button>
+                    > {id ? "Update" : "Post"}</Button>
                 </div>
             </form>
 

@@ -1,6 +1,8 @@
 import {React, useState} from 'react'
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import '../App.css'
+import {authenticateUser} from '../app/api'
+import {getUserInfo} from '../app/api'
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -58,9 +60,16 @@ const useStyles = makeStyles((theme) => ({
 
 export const LoginPage = () => {
     const classes = useStyles();
+    let history = useHistory();
     const credentials = {
         username: '',
         password: ''
+    }
+
+    const initialUser = {
+      token: localStorage.getItem('token'),
+      isAuthenticated: false,
+      userData: {}
     }
 
     const [loginCredentials, setLoginCredentials] = useState(credentials)
@@ -68,31 +77,46 @@ export const LoginPage = () => {
     const [passwordError, setPasswordError] = useState(false)
     const [usernameErrorMessage, setUsernameErrorMessage] = useState('')
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+    const [user, setUser] = useState(initialUser)
 
 
     const handleLoginCredentials = (e) => {
         e.preventDefault()
         setLoginCredentials({
-            ...loginCredentials,
-            [e.target.name]: e.target.value
+          ...loginCredentials,
+          [e.target.name]: e.target.value
         })
         if (e.target.name === 'username') {
-            setUsernameError(false)
+          setUsernameError(false)
         }
         if (e.target.name === 'password') {
-            setPasswordError(false)
+          setPasswordError(false)
         }
     }
-
-    const onFinish = (e) => {
-        e.preventDefault()
-        const username = e.target.username.value;
-        const password = e.target.password.value;
-        console.log(loginCredentials)
+    
+    const onFinish = async (e) => {
+      e.preventDefault()
+      const config = { headers: { 'Content-Type': 'application/json'} };
+        
+      try {
+        const response = await authenticateUser(loginCredentials, config)
         setLoginCredentials(credentials)
-    }
-
-
+        const config2 = {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${response.token}` } };
+    
+          try {
+              const profile = await getUserInfo(config2)
+              setUser({...user, token: response.token, isAuthenticated: true, userData: profile})
+              localStorage.setItem('token', response.token);
+              localStorage.setItem('userId', profile.id);
+              history.push("/")
+            } catch (err) { console.log('Profile Error : ' + err)}
+        } 
+        catch (err) { console.log('Login Error : ' + err)}
+      }
+          
     return (
         <Container component="main" maxWidth="xs" className="login-container">
             <CssBaseline />
@@ -139,7 +163,7 @@ export const LoginPage = () => {
                     color="primary"
                     className={classes.submit}
                 >
-                    <Link to="/" style={{color: 'inherit' , textDecoration: 'none'}} > Login </Link>
+                    Login
                 </Button>
                 <Grid container>
                     <Grid item xs>

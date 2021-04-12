@@ -16,7 +16,8 @@
     padding: 12px;
     width: 90%;
     margin: 6px 4px;
-    height: 200px;
+    height: auto;
+    max-height: 200px;
     border-radius: 12px;
 }
 

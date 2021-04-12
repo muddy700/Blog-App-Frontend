@@ -1,6 +1,8 @@
 import {React, useState} from 'react'
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import '../App'
+import {createUser} from '../app/api'
+
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -58,12 +60,12 @@ const useStyles = makeStyles((theme) => ({
 
 export const SignUpPage = () => {
     const classes = useStyles();
+    let history = useHistory();
     const credentials = {
         username: '',
         email: '',
         password: ''
     }
-
 
     const [signUpCredentials, setSignUpCredentials] = useState(credentials)
     const [usernameError, setUsernameError] = useState(false)
@@ -72,7 +74,6 @@ export const SignUpPage = () => {
     const [usernameErrorMessage, setUsernameErrorMessage] = useState('')
     const [emailErrorMessage, setEmailErrorMessage] = useState('')
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
-
 
     const handleSignUpCredentials = (e) => {
         e.preventDefault()
@@ -88,15 +89,15 @@ export const SignUpPage = () => {
         }
     }
 
-    const onFinish = (e) => {
+    const onFinish = async (e) => {
         e.preventDefault()
-        const username = e.target.username.value;
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        console.log(signUpCredentials)
-        setSignUpCredentials(credentials)
+        
+        try {
+          const response = await createUser(signUpCredentials)
+          setSignUpCredentials(credentials)
+          history.push("/login")
+          } catch (err) { console.log('Account Error : ' + err)}
     }
-
 
     return (
         <Container component="main" maxWidth="xs" className="login-container">
@@ -157,7 +158,7 @@ export const SignUpPage = () => {
                     color="primary"
                     className={classes.submit}
                 >
-                    <Link to="/login" style={{color: 'inherit' , textDecoration: 'none'}} > Submit </Link>
+                  Submit
                 </Button>
                 <Grid container>
                     <Grid item>
