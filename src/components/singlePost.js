@@ -6,6 +6,8 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { Link } from "react-router-dom";
 import { useHistory, useParams } from "react-router-dom";
 import {getSinglePost, deleteSinglePost} from '../app/api'
+import {Navbar} from './navbar';
+import {TimeAgo} from './timeAgo'
 
 export const SinglePost = () => {
     
@@ -19,15 +21,9 @@ export const SinglePost = () => {
     }
 
     const fetchSinglePost = async (id) => {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
-            }
-        };
 
         try {
-            const postData = await getSinglePost(id, config)
+            const postData = await getSinglePost(id)
             setSinglePost(postData)
         } catch (err) {
             console.log('Single Post Error : ' + err)
@@ -54,12 +50,14 @@ export const SinglePost = () => {
         fetchSinglePost(postId);
     }, [])
 
-    const {id, title, content, author, date_created } = singlePost;
-    return (
+    const {id, title, content, author_name, author, date_updated } = singlePost;
+    return (<>
+        <Navbar />
         <div className="posts-container">
             <div className="opened-post-card" key={id}>
                 <h5>{title}</h5>
-                <p>By {author}. <i>{date_created} Ago.</i></p>
+                <p>By <b>{author_name}</b>. 
+                <TimeAgo timestamp={date_updated} /></p>
                 <p className="opened-post-body"> {content} </p>
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
@@ -83,7 +81,7 @@ export const SinglePost = () => {
                     </Button>
                  </div>
             </div>
-        </div>
+        </div> </>
     )
 }
 

@@ -1,6 +1,8 @@
 import {React, useState, useEffect} from 'react'
 import '../styles/notifications.css'
 import {fetchAllNotifications} from '../app/api';
+import {Navbar} from './navbar'
+import {TimeAgo} from './timeAgo'
 
 export const Notifications = () => {
     const [showCloser, setShowCloser] = useState(false)
@@ -24,24 +26,16 @@ export const Notifications = () => {
 
 
     return (
-        
+        <><Navbar />
         <div className="notifications-container">
-            <div className="notification-card">
-                <p><b>John Doe </b> 
-                Is Feel ing Go od With Alice And 4 Oth ers. 
-                Is Fee ling Good With Alice And 4 Others. 
-                Is Feel ing Good With Alice And 4 Others. 
-                Is Feeling Good With Alice And 4 Others. 
-                </p> 
-                <i>9 hours ago</i>
-            </div>
-            {notifications.map(({id, sender, message, date_created}) => 
+             {notifications.slice().sort((a, b) => b.date_created.localeCompare(a.date_created))
+            .map(({id, sender_name, message, date_created}) => 
                 <div className="notification-card" key={id}>
-                    <p><b>{sender} </b> {message}</p> 
-                    <i>{date_created} ago</i>
+                    <p><b>{sender_name} </b> {message}</p> 
+                    <TimeAgo timestamp={date_created} />
                 </div>
             )}
-        </div>
+        </div> </>
     )
 }
 

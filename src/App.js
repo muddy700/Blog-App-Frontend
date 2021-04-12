@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import {Navbar } from './components/navbar'
 import {PostList } from './components/postList'
 import {MyPosts } from './components/myPosts'
+import {PrivateRoute} from './components/privateRoute'
 import {Notifications } from './components/notifications'
 import {PageNotFound } from './components/pageNotFound'
 import LoginPage from './components/loginPage';
@@ -35,40 +35,34 @@ export const App = () => {
             <Route exact path="/forgot-password">
               <ForgotPasswordPage />
             </Route>
-            <Route exact path="/my-posts">
-              <Navbar />
-              <MyPosts />
-            </Route>
-            <Route exact path="/profile">
-              <Navbar />
-              <Profile />
-            </Route>
-            <Route exact path="/posts/:postId/details">
-              <Navbar />
-              <SinglePost />
-            </Route>
+            <PrivateRoute exact path="/my-posts"
+              component={MyPosts} >
+            </PrivateRoute>
+            <PrivateRoute exact path="/profile"
+              component={Profile}>
+            </PrivateRoute>
+            <PrivateRoute exact path="/posts/:postId/details"
+              component={SinglePost} >
+            </PrivateRoute>
             <Route exact path="/notifications">
-              <Navbar />
               <Notifications />
             </Route>
-            <Route exact path="/my-notifications">
-              <Navbar />
-              <MyNotifications />
-            </Route>
-            <Route exact path={["/posts/:id/edit", "/post-form"]}>
-              <Navbar />
-              <PostForm />
-            </Route>
-            <Route exact path="/notification-form">
-              <Navbar />
-              <NotificationForm />
+            <PrivateRoute exact path="/my-notifications"
+              component={MyNotifications} >
+            </PrivateRoute>
+            <PrivateRoute exact path={["/posts/:id/edit", "/post-form"]}
+              component={PostForm} >
+            </PrivateRoute>
+            <PrivateRoute exact path="/notification-form"
+              component={NotificationForm}>
+            </PrivateRoute>
+            <Route exact path="/blog/home">
+              <PostList/>
             </Route>
             <Route exact path="/">
-              <Navbar />
-              <PostList />
+              <PostList/>
             </Route>
             <Route path="*">
-              <Navbar />
               <PageNotFound />
             </Route>
         </Switch>

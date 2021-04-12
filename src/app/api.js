@@ -23,7 +23,7 @@ export async function logoutUser(config) {
 
 // Posts APIs
 export async function fetchAllPosts(config) {
-    const response = await baseLink.get("posts/", config)
+    const response = await baseLink.get("posts/")
     return response.data
 }
 
@@ -33,28 +33,28 @@ export async function fetchUserPosts(config) {
 }
 
 export async function createPost(payload, config) {
-    const response = await baseLink.post("posts/", payload, config )
+    const response = await baseLink.post("posts/", payload)
     return response.data
 }
 
 export async function updatePost(postId, payload, config) {
-    const response = await baseLink.put(`posts/${postId}/`, payload, config )
+    const response = await baseLink.put(`posts/${postId}/`, payload)
     return response.data
 }
 
 export async function getSinglePost(postId, config) {
-    const response = await baseLink.get(`posts/${postId}`, config)
+    const response = await baseLink.get(`posts/${postId}`)
     return response.data
 }
 
 export async function deleteSinglePost(id, config) {
-    const response = await baseLink.delete(`posts/${id}/`, config)
+    const response = await baseLink.delete(`posts/${id}/`)
     return response.data
 }
 
 // Notifications APIs
-export async function fetchAllNotifications(config) {
-    const response = await baseLink.get("notifications/", config)
+export async function fetchAllNotifications() {
+    const response = await baseLink.get("notifications/")
     return response.data
 }
 
@@ -64,12 +64,12 @@ export async function fetchUserNotifications(config) {
 }
 
 export async function deleteSingleNotification(id, config) {
-    const response = await baseLink.delete(`notifications/${id}/`, config)
+    const response = await baseLink.delete(`notifications/${id}/`)
     return response.data
 }
 
 export async function createNotification(payload, config) {
-    const response = await baseLink.post("notifications/", payload, config )
+    const response = await baseLink.post("notifications/", payload )
     return response.data
 }
 

@@ -2,7 +2,9 @@ import {React, useState, useEffect} from 'react'
 import '../styles/notifications.css'
 import {Button} from '@material-ui/core/';
 import { Link } from "react-router-dom";
+import {Navbar} from './navbar'
 import {fetchUserNotifications, deleteSingleNotification} from '../app/api';
+import {TimeAgo} from './timeAgo'
 
 export const MyNotifications = () => {
     const [showCloser, setShowCloser] = useState(false)
@@ -47,31 +49,22 @@ export const MyNotifications = () => {
 
 
     return (<>
+        <Navbar />
         <Link to="/notification-form" className="links">
             <Button color="primary" variant="contained">Add Notification</Button>
         </Link>
         <div className="notifications-container">
-            <div className="notification-card"
-                onMouseOver={e => {e.preventDefault(); setShowCloser(true)}}
-                onMouseLeave={e => {e.preventDefault(); setShowCloser(false)}}>
-                <button className="notification-closer" hidden={!showCloser}>x</button>
-                <p><b>John Doe </b> 
-                Is Feel ing Go od With Alice And 4 Oth ers. 
-                Is Fee ling Good With Alice And 4 Others. 
-                Is Feel ing Good With Alice And 4 Others. 
-                Is Feeling Good With Alice And 4 Others. 
-                </p> 
-                <i>9 hours ago</i>
-            </div>
-            {userNotifications.map(({id, sender, message, date_created}) => 
+            {userNotifications.slice().sort((a, b) => b.date_created.localeCompare(a.date_created))
+            .map(({id, sender_name, message, date_created}) => 
                 <div className="notification-card" key={id}
                     onMouseOver={e => {e.preventDefault(); setShowCloser(true)}}
                     onMouseLeave={e => {e.preventDefault(); setShowCloser(false)}}>
                     <button className="notification-closer" 
                         hidden={!showCloser}
                         onClick={e =>{e.preventDefault(); deleteNotification(id)}}>x</button>
-                    <p><b>{sender} </b> {message}</p> 
-                    <i>{date_created} ago</i>
+                    <p><b>{sender_name} </b> {message}</p> 
+                    <TimeAgo timestamp={date_created} />
+                    
                 </div>
             )}
         </div> </>

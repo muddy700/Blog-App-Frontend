@@ -111,7 +111,8 @@ export const LoginPage = () => {
               setUser({...user, token: response.token, isAuthenticated: true, userData: profile})
               localStorage.setItem('token', response.token);
               localStorage.setItem('userId', profile.id);
-              history.push("/")
+              localStorage.setItem('isLoggedIn', true);
+              history.push("/blog/home")
             } catch (err) { console.log('Profile Error : ' + err)}
         } 
         catch (err) { console.log('Login Error : ' + err)}

@@ -5,6 +5,7 @@ import { Button } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import {getUserInfo} from '../app/api'
+import {Navbar} from './navbar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,7 +46,8 @@ export const Profile = () => {
       getUserData();
     }, [])
 
-    return (
+    return (<>
+      <Navbar />
       <div className="profile-container">
             <div className={classes.root}>
              <Avatar  className={classes.large}>M</Avatar>
@@ -61,7 +63,7 @@ export const Profile = () => {
                 onClick={goToPreviousPage} color="secondary" style={{width: '40%', marginTop: 20}}>
                 Close
             </Button>
-        </div>
+        </div> </>
     )
 }
 

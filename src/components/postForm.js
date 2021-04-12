@@ -4,6 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import {createPost, updatePost} from '../app/api'
 import {getSinglePost} from '../app/api'
 import {Card, TextField, Button, CardContent} from '@material-ui/core';
+import {Navbar} from './navbar';
 
 export const PostForm = () => {
 
@@ -55,17 +56,11 @@ export const PostForm = () => {
             title: postInfo.title,
             content: postInfo.content,
         }
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
-            }
-        };
         
         try {
             let response;
-            if(id) { response = await updatePost(id, payload, config) }
-            else { response = await createPost(payload, config) }
+            if(id) { response = await updatePost(id, payload) }
+            else { response = await createPost(payload) }
             setPostInfo(initialPost)
             goToPreviousPage();
         } catch (err) {
@@ -74,7 +69,8 @@ export const PostForm = () => {
     }
 
     const IsFormValid = postInfo.title !== '' && postInfo.content !== '';
-    return (
+    return (<>
+     <Navbar />
       <div className="posts-container">
       <Card className="new-message-card">
         <CardContent style={{textAlign: 'center'}} >
@@ -121,7 +117,7 @@ export const PostForm = () => {
 
         </CardContent>
         </Card>
-        </div> 
+        </div> </>
     )
 }
 
