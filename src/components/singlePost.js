@@ -4,12 +4,18 @@ import '../styles/posts.css'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { Link } from "react-router-dom";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import {getSinglePost, deleteSinglePost} from '../app/api'
 import {Navbar} from './navbar';
 import {TimeAgo} from './timeAgo'
 
-export const SinglePost = () => {
+export const SinglePost = ({props}) => {
+        // const location = useLocation()
+
+    // useEffect(() => {
+    // const post = props.location.post1;
+    // console.log(post)
+    // // }, [])
     
     let history = useHistory();
     const {postId} = useParams()

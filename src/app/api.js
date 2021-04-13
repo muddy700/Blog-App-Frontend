@@ -73,6 +73,11 @@ export async function createNotification(payload, config) {
     return response.data
 }
 
+// For Post Votes
+export async function fetchAllVotes() {
+    const response = await baseLink.get("postVotes/")
+    return response.data
+}
 // export async function editUser(id, payload) {
 //     const response = await baseLink.put(`users/update/${id}`, payload)
 //     return response

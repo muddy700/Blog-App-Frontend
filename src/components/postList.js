@@ -6,17 +6,20 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
 import { Link } from "react-router-dom";
-import {fetchAllPosts} from '../app/api';
+import {fetchAllPosts, fetchAllVotes} from '../app/api';
 import {Navbar} from './navbar';
 import {TimeAgo} from './timeAgo'
 
 export const PostList = () => {
  
     const [posts, setPosts] = useState([])
+    const [postsWithVotes, setPostsWithVotes] = useState([])
+    const [votes, setVotes] = useState([])
     const [isLiked, setIsLiked] = useState(false)
     const [isDisliked, setisDisliked] = useState(false)
     const [likes, setLikes] = useState(0)
     const [disLikes, setDisLikes] = useState(0)
+    const userId = localStorage.getItem('userId')
 
     const fetchPosts = async () => {
     
@@ -26,34 +29,34 @@ export const PostList = () => {
         } catch (err) { console.log('Posts Error : ' + err)}
     }
 
-    const handleLikes = () => {
-        if(isLiked) { }
-        else{
-            setLikes(likes + 1)
-            setIsLiked(true)
-            if(isDisliked){
-                setisDisliked(false)
-                setDisLikes(disLikes - 1)
-            }
-        }
-        
+    const fetchVotes = async () => {
+        try {
+            const response = await fetchAllVotes()
+            setVotes(response)
+        } catch (err) { console.log('Votes Error : ' + err)}
     }
 
-    const handleDislikes = () => {
-        if(isDisliked) { }
-        else{
-            setisDisliked(true)
-            setDisLikes(disLikes + 1)
-            if(isLiked){
-                setIsLiked(false)
-                setLikes(likes -1)
+    const showThem = () => {
+        
+        const newPosts = posts.map((post) => {
+            return{
+                ...post,
+                pVotes: votes.find((vote) => vote.post === post.id)
             }
-        }
+        })
+        // console.log(newPosts)
+        setPostsWithVotes(newPosts)
     }
 
     useEffect(() => {
         fetchPosts();
+        fetchVotes();
     }, [])
+
+    useEffect(() => {
+        showThem();
+    }, [votes])
+    
 
     return (<>
         <Navbar />
@@ -66,12 +69,15 @@ export const PostList = () => {
                         <i><TimeAgo timestamp={post.date_updated} /></i></p>
                     <p className="post-body">{post.content} </p>
                     <div className="post-actions">
-                        <Button color="primary" onClick={handleLikes}>
-                            {isLiked ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon /> }&nbsp; {likes}
+                        <Button color="primary" >
+                             <ThumbUpOutlinedIcon /> &nbsp; 10
+                            {/* {post.pVotes.up.find((vote) => vote == userId ) ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon /> }&nbsp; {post.pVotes.up.length} */}
                         </Button>
-                        <Button color="primary" onClick={handleDislikes}>
-                            {isDisliked ? <ThumbDownIcon /> : <ThumbDownOutlinedIcon /> }&nbsp; {disLikes}
+                        <Button color="primary" >
+                            <ThumbDownOutlinedIcon /> &nbsp; 5
+                            {/* {post.pVotes.down.find((vote) => vote == userId )  ? <ThumbDownIcon /> : <ThumbDownOutlinedIcon /> }&nbsp; {post.pVotes.down.length} */}
                         </Button>
+                        
                         <Link to={{pathname: `/posts/${post.id}/details`}}>
                             <Button variant="contained" color="primary" style={{float: 'right'}}>
                                 View Post
