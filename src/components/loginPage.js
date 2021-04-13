@@ -94,32 +94,65 @@ export const LoginPage = () => {
         }
     }
     
+  const formValidator = (e) => {
+      e.preventDefault()
+      const username = e.target.username.value;
+      const password = e.target.password.value;
+
+      if (username === '') {
+          setUsernameError(true)
+          setUsernameErrorMessage('Username Cannot Be Blank!')
+          return false;
+      } else if (password === '') {
+          setPasswordError(true)
+          setPasswordErrorMessage('Password Cannot Be Blank!')
+          return false;
+      } else {
+          setUsernameError(false);
+          setPasswordError(false);
+          setUsernameErrorMessage('');
+          setPasswordErrorMessage('');
+          return true;
+      }
+
+  }
+
     const onFinish = async (e) => {
       e.preventDefault()
+      const validation = formValidator(e);
       const config = { headers: { 'Content-Type': 'application/json'} };
-        
-      try {
-        const response = await authenticateUser(loginCredentials, config)
-        setLoginCredentials(credentials)
-        const config2 = {
+       
+      if (validation) {
+        try {
+          const response = await authenticateUser(loginCredentials, config)
+          setLoginCredentials(credentials)
+          const config2 = {
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Token ${response.token}` } };
+              'Authorization': `Token ${response.token}`
+            }
+          };
     
           try {
-              const profile = await getUserInfo(config2)
-              setUser({...user, token: response.token, isAuthenticated: true, userData: profile})
-              localStorage.setItem('token', response.token);
-              localStorage.setItem('userId', profile.id);
-              localStorage.setItem('isLoggedIn', true);
-              history.push("/blog/home")
-            } catch (err) { console.log('Profile Error : ' + err)}
-        } 
-        catch (err) { console.log('Login Error : ' + err)}
+            const profile = await getUserInfo(config2)
+            setUser({ ...user, token: response.token, isAuthenticated: true, userData: profile })
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('userId', profile.id);
+            localStorage.setItem('isLoggedIn', true);
+            history.push("/blog/home")
+          } catch (err) { console.log('Profile Error : ' + err) }
+        }
+        catch (err) {
+          setUsernameError(true)
+          setUsernameErrorMessage('Incorrect username Or Password')
+          console.log('Login Error : ' + err)
+        }
+      }
+      else { console.log('Login Form Is Invalid')}
       }
           
     return (
-        <Container component="main" maxWidth="xs" className="login-container">
+      <Container component="main" maxWidth="xs" className="login-container">
             <CssBaseline />
                 <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -130,7 +163,7 @@ export const LoginPage = () => {
                 </Typography>
                 <form className={classes.form}  name="loginForm" onSubmit={onFinish}>
                 <TextField
-                    variant="outlined"
+                    variant="filled"
                     margin="normal"
                     fullWidth
                     id="username"
@@ -144,7 +177,7 @@ export const LoginPage = () => {
                     value={loginCredentials.username}
                 />
                 <TextField
-                    variant="outlined"
+                    variant="filled"
                     margin="normal"
                     fullWidth
                     name="password"
@@ -168,14 +201,10 @@ export const LoginPage = () => {
                 </Button>
                 <Grid container>
                     <Grid item xs>
-                    <Link href="#" variant="body2" className="links">
-                        <Link to="/forgot-password" style={{color: 'inherit', textDecoration: 'none'}}>Forgot Password</Link>
-                    </Link>
+                        <Link to="/forgot-password" className="links">Forgot Password</Link>
                     </Grid>
                     <Grid item>
-                    <Link href="#" variant="body2" className="links" >
-                        <Link to="/sign-up" style={{color: 'inherit', textDecoration: 'none'}}> No Account ? SignUp </Link>
-                    </Link>
+                        <Link to="/sign-up" className="links"> No Account ? SignUp </Link>
                     </Grid>
                 </Grid>
                 </form>

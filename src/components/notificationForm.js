@@ -51,7 +51,7 @@ export const NotificationForm = () => {
                     name="content"
                     className="form-input"
                     label="Content" 
-                    variant="outlined"
+                    variant="filled"
                     multiline
                     rows={5}
                     value={notificationBody}

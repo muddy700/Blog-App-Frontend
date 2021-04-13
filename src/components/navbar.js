@@ -4,9 +4,10 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import Tooltip from '@material-ui/core/Tooltip';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import {logoutUser} from '../app/api'
+import { logoutUser } from '../app/api'
+import {FeedBack} from './feedBackCard'
 
-export const Navbar = () => {
+export const Navbar = ({message, type, status}) => {
     const history = useHistory();
     const location= useLocation();
     const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -27,7 +28,7 @@ export const Navbar = () => {
             history.push("/blog/home")
         } catch (err) { console.log('Logout Error : ' + err) }
     }
-
+    
     return (<>
             <nav class="navbar navbar-expand-sm navbar-dark bg-dark" style={{width: '100%'}}>
                 <div class="container-fluid">
@@ -92,7 +93,8 @@ export const Navbar = () => {
                     </div>
                 </div>
             </nav>
-                         {/* <p>{Location.pathname} here</p> */}
+        <FeedBack message={message} type={type} status={status} />
+        {/* <p>{Location.pathname} here</p> */}
             </>
     )
 }

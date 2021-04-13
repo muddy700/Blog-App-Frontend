@@ -26,7 +26,9 @@ export const Notifications = () => {
 
 
     return (
-        <><Navbar />
+        // <div className="internal-card">
+        <>
+        <Navbar />
         <div className="notifications-container">
              {notifications.slice().sort((a, b) => b.date_created.localeCompare(a.date_created))
             .map(({id, sender_name, message, date_created}) => 
@@ -35,7 +37,8 @@ export const Notifications = () => {
                     <TimeAgo timestamp={date_created} />
                 </div>
             )}
-        </div> </>
+            {/* </div> */}
+        </div></>
     )
 }
 

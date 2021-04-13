@@ -84,19 +84,70 @@ export const SignUpPage = () => {
         if (e.target.name === 'username') {
             setUsernameError(false)
         }
+        if (e.target.name === 'email') {
+            setEmailerror(false)
+        }
         if (e.target.name === 'password') {
             setPasswordError(false)
         }
     }
 
+  const formValidator = (e) => {
+      e.preventDefault();
+      const username = e.target.username.value;
+      const email = e.target.email.value;
+      const password = e.target.password.value;
+      let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const emailResult = re.test(email)
+
+      //For Email Validation
+      if (username === '') {
+          setUsernameError(true)
+          setUsernameErrorMessage('Username Cannot Be Blank!')
+          return false;
+      } else if (username.length < 4) {
+          setUsernameError(true)
+          setUsernameErrorMessage('Use Atleast 4 Characters')
+          return false;
+      } else if (email === '') {
+          setEmailerror(true)
+          setEmailErrorMessage('Email Cannot Be Blank!')
+          return false;
+      } else if (!emailResult) {
+          setEmailerror(true)
+          setEmailErrorMessage('Enter A Valid Email')
+          return false;
+      } else if (password === '') {
+          setPasswordError(true)
+          setPasswordErrorMessage('Password Cannot Be Blank!')
+          return false;
+      } else if (password.length < 6) {
+          setPasswordError(true)
+          setPasswordErrorMessage('Use AtLeast Six Characters')
+          return false;
+      } else {
+          setUsernameError(false);
+          setEmailerror(false);
+          setPasswordError(false);
+          setEmailErrorMessage('');
+          setPasswordErrorMessage('');
+          return true;
+      }
+  }
     const onFinish = async (e) => {
-        e.preventDefault()
+      e.preventDefault()
+      const validation = formValidator(e);
         
+      if (validation) {
         try {
           const response = await createUser(signUpCredentials)
           setSignUpCredentials(credentials)
           history.push("/login")
-          } catch (err) { console.log('Account Error : ' + err)}
+        } catch (err) { console.log('Sign Up Error : ' + err) }
+      }
+      else {
+        console.log('Form Is Invalid')
+      }
     }
 
     return (
@@ -111,7 +162,7 @@ export const SignUpPage = () => {
                 </Typography>
                 <form className={classes.form}  name="loginForm" onSubmit={onFinish}>
                 <TextField
-                    variant="outlined"
+                    variant="filled"
                     margin="normal"
                     fullWidth
                     id="username"
@@ -125,7 +176,7 @@ export const SignUpPage = () => {
                     helperText={usernameError ? usernameErrorMessage : ''}
                 />
                 <TextField
-                    variant="outlined"
+                    variant="filled"
                     margin="normal"
                     fullWidth
                     id="email"
@@ -138,7 +189,7 @@ export const SignUpPage = () => {
                     autoComplete="email"
                 />
                 <TextField
-                    variant="outlined"
+                    variant="filled"
                     margin="normal"
                     fullWidth
                     name="password"
@@ -162,9 +213,7 @@ export const SignUpPage = () => {
                 </Button>
                 <Grid container>
                     <Grid item>
-                    <Link href="#" variant="body2" className="links">
-                        <Link to="/login" style={{color: 'inherit', textDecoration: 'none'}}> Have Account ? Sign In </Link>
-                    </Link>
+                        <Link to="/login" className="links"> Have Account ? Sign In </Link>
                     </Grid>
                 </Grid>
                 </form>

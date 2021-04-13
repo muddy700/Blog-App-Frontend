@@ -38,7 +38,7 @@ export const Profile = () => {
     
           try {
               const profile = await getUserInfo(config)
-              setUserProfile(profile)
+            setUserProfile(profile)
             } catch (err) { console.log('Profile Error : ' + err)}
     }
 
@@ -50,12 +50,12 @@ export const Profile = () => {
       <Navbar />
       <div className="profile-container">
             <div className={classes.root}>
-             <Avatar  className={classes.large}>M</Avatar>
+             <Avatar  className={classes.large}></Avatar>
             </div>
             <div className="info-card">
                 <div className="info-row"><b>Username: </b> <p>{userProfile.username}</p> </div>
-                <div className="info-row"><b>First Name: </b> <p>John</p> </div>
-                <div className="info-row"><b>Last Name: </b> <p>Doe</p> </div>
+                {/* <div className="info-row"><b>First Name: </b> <p>John</p> </div> */}
+                {/* <div className="info-row"><b>Last Name: </b> <p>Doe</p> </div> */}
                 <div className="info-row"><b>Email: </b> <p> {userProfile.email} </p></div>
                 <div className="info-row"><b>Date Joined: </b> <p> {userProfile.date_joined}  </p> </div>
             </div>

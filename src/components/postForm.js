@@ -84,7 +84,7 @@ export const PostForm = () => {
                     onChange={handlePostForm} 
                     className="form-input" 
                     label="title" 
-                    variant="outlined"
+                    variant="filled"
                     value={postInfo.title}
                     autoFocus />
                 <TextField
@@ -93,7 +93,7 @@ export const PostForm = () => {
                     name="content"
                     className="form-input"
                     label="Content" 
-                    variant="outlined"
+                    variant="filled"
                     multiline
                     rows={5}
                     value={postInfo.content}
