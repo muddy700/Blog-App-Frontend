@@ -4,11 +4,15 @@ import { useHistory, useParams } from "react-router-dom";
 import {createPost, updatePost} from '../app/api'
 import {getSinglePost} from '../app/api'
 import {Card, TextField, Button, CardContent} from '@material-ui/core';
-import {Navbar} from './navbar';
+import { Navbar } from './navbar';
+import {useDispatch} from 'react-redux'
+import {savePost } from '../slices/postSlice'
 
 export const PostForm = () => {
 
     let history = useHistory();
+    const dispatch = useDispatch()
+
     const {id} = useParams()
     const initialPost = {
         title: '',
@@ -26,7 +30,6 @@ export const PostForm = () => {
         setPostInfo({...postInfo,
             [e.target.name] : e.target.value
         })
-
     }
 
     const fetchSinglePost = async (postId) => {
@@ -59,8 +62,13 @@ export const PostForm = () => {
         
         try {
             let response;
-            if(id) { response = await updatePost(id, payload) }
-            else { response = await createPost(payload) }
+            if (id) {
+                response = await updatePost(id, payload)
+            }
+            else {
+                response = await createPost(payload)
+                dispatch(savePost(payload))
+            }
             setPostInfo(initialPost)
             goToPreviousPage();
         } catch (err) {

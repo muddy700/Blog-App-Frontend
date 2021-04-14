@@ -8,32 +8,19 @@ import { useHistory, useParams, useLocation } from "react-router-dom";
 import {getSinglePost, deleteSinglePost} from '../app/api'
 import {Navbar} from './navbar';
 import {TimeAgo} from './timeAgo'
+import { useSelector } from 'react-redux'
+import { getPostById } from '../slices/postSlice'
 
 export const SinglePost = ({props}) => {
-        // const location = useLocation()
-
-    // useEffect(() => {
-    // const post = props.location.post1;
-    // console.log(post)
-    // // }, [])
     
     let history = useHistory();
-    const {postId} = useParams()
-    const [singlePost, setSinglePost] = useState({})
+    const { postId } = useParams()
+    // console.log(postId)
+    const singlePost = useSelector(state => getPostById(state, postId))
     const activeUserId = localStorage.getItem('userId');
 
     const goToPreviousPage = () => {
         history.goBack()
-    }
-
-    const fetchSinglePost = async (id) => {
-
-        try {
-            const postData = await getSinglePost(id)
-            setSinglePost(postData)
-        } catch (err) {
-            console.log('Single Post Error : ' + err)
-        }
     }
 
      const deletePost = async (id) => {
@@ -53,7 +40,6 @@ export const SinglePost = ({props}) => {
      }
 
     useEffect(() => {
-        fetchSinglePost(postId);
     }, [])
 
     const {id, title, content, author_name, author, date_updated } = singlePost;

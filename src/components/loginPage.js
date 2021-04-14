@@ -14,6 +14,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import {useDispatch} from 'react-redux'
+import { saveUser } from '../slices/userSlice'
+
 // import Backdrop from '@material-ui/core/Backdrop';
 // import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -59,17 +63,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 export const LoginPage = () => {
-    const classes = useStyles();
-    let history = useHistory();
+
+  const classes = useStyles();
+  const history = useHistory();
+  const dispatch = useDispatch()
+
     const credentials = {
         username: '',
         password: ''
-    }
-
-    const initialUser = {
-      token: localStorage.getItem('token'),
-      isAuthenticated: false,
-      userData: {}
     }
 
     const [loginCredentials, setLoginCredentials] = useState(credentials)
@@ -77,8 +78,6 @@ export const LoginPage = () => {
     const [passwordError, setPasswordError] = useState(false)
     const [usernameErrorMessage, setUsernameErrorMessage] = useState('')
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
-    const [user, setUser] = useState(initialUser)
-
 
     const handleLoginCredentials = (e) => {
         e.preventDefault()
@@ -114,7 +113,6 @@ export const LoginPage = () => {
           setPasswordErrorMessage('');
           return true;
       }
-
   }
 
     const onFinish = async (e) => {
@@ -135,9 +133,14 @@ export const LoginPage = () => {
     
           try {
             const profile = await getUserInfo(config2)
-            setUser({ ...user, token: response.token, isAuthenticated: true, userData: profile })
+            dispatch(saveUser({
+              token: response.token,
+              isAuthenticated: true,
+              userId: profile.id,
+              username: profile.username,
+              email: profile.email
+            }))
             localStorage.setItem('token', response.token);
-            localStorage.setItem('userId', profile.id);
             localStorage.setItem('isLoggedIn', true);
             history.push("/blog/home")
           } catch (err) { console.log('Profile Error : ' + err) }

@@ -1,67 +1,66 @@
-import {React, useState, useEffect} from 'react'
+import {React, useEffect} from 'react'
 import {Button} from '@material-ui/core/';
 import '../styles/posts.css'
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+// import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+// import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
-import { Link } from "react-router-dom";
-import {fetchAllPosts, fetchAllVotes} from '../app/api';
+import { Link, useHistory } from "react-router-dom";
+import {fetchAllPosts, getUserInfo } from '../app/api';
 import {Navbar} from './navbar';
-import {TimeAgo} from './timeAgo'
+import { TimeAgo } from './timeAgo'
+import {useSelector, useDispatch}  from 'react-redux'
+import { selectPostList, fetchPosts } from '../slices/postSlice'
+import { saveUser, selectUserData } from '../slices/userSlice'
+
 
 export const PostList = () => {
  
-    const [posts, setPosts] = useState([])
-    const [postsWithVotes, setPostsWithVotes] = useState([])
-    const [votes, setVotes] = useState([])
-    const [isLiked, setIsLiked] = useState(false)
-    const [isDisliked, setisDisliked] = useState(false)
-    const [likes, setLikes] = useState(0)
-    const [disLikes, setDisLikes] = useState(0)
-    const userId = localStorage.getItem('userId')
+    const postList = useSelector(selectPostList)
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const user = useSelector(selectUserData)
 
-    const fetchPosts = async () => {
+    const pullPosts = async () => {
     
         try {
             const response = await fetchAllPosts()
-            setPosts(response)
+            dispatch(fetchPosts(response))
         } catch (err) { console.log('Posts Error : ' + err)}
     }
 
-    const fetchVotes = async () => {
-        try {
-            const response = await fetchAllVotes()
-            setVotes(response)
-        } catch (err) { console.log('Votes Error : ' + err)}
-    }
-
-    const showThem = () => {
-        
-        const newPosts = posts.map((post) => {
-            return{
-                ...post,
-                pVotes: votes.find((vote) => vote.post === post.id)
-            }
-        })
-        // console.log(newPosts)
-        setPostsWithVotes(newPosts)
-    }
-
-    useEffect(() => {
-        fetchPosts();
-        fetchVotes();
-    }, [])
-
-    useEffect(() => {
-        showThem();
-    }, [votes])
+    const pullUserData = async () => {
+        const config2 = {
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${user.token}`
+                    }
+                };
     
+        try {
+        const profile = await getUserInfo(config2)
+        dispatch(saveUser({
+            token: user.token,
+            isAuthenticated: true,
+            userId: profile.id,
+            username: profile.username,
+            email: profile.email
+        }))
+        localStorage.setItem('isLoggedIn', true);
+        } catch (err) { console.log('Profile Error : ' + err) }
+    }
+
+    
+
+    useEffect(() => {
+        pullPosts();
+        pullUserData();
+    }, [])
 
     return (<>
         <Navbar />
         <div className="posts-container">
-            {posts.slice().sort((a, b) => b.date_updated.localeCompare(a.date_updated))
+            {postList.slice().sort((a, b) => b.date_updated.localeCompare(a.date_updated))
             .map((post) => (
                 <div className="post-card" key={post.id}>
                     <h5>{post.title}</h5>

@@ -4,29 +4,17 @@ import '../styles/posts.css'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { Link } from "react-router-dom";
-import {fetchUserPosts} from '../app/api';
 import {Navbar} from './navbar'
-import {TimeAgo} from './timeAgo'
+import { TimeAgo } from './timeAgo'
+import { useSelector } from 'react-redux'
+import { fetchUserPosts } from '../slices/postSlice'
+import { selectUserData} from '../slices/userSlice'
 
 export const MyPosts = () => {
-    const [userPosts, setUserPosts] = useState([])
 
-    const pullUserPosts = async () => {
-        const config = {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('token')}` } };
-    
-        try {
-            const response = await fetchUserPosts(config)
-            setUserPosts(response)
-        } catch (err) { console.log('User Posts Error : ' + err)}
-    }
-
-    useEffect(() => {
-        pullUserPosts();
-    }, [])
-
+    const user = useSelector(selectUserData)
+    // console.log(user)
+    const userPosts = useSelector(state => fetchUserPosts(state, user.userId))
 
     return (<>
         <Navbar />
