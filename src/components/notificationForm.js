@@ -3,12 +3,17 @@ import '../styles/notifications.css'
 import { useHistory } from "react-router-dom";
 import {createNotification} from '../app/api'
 import {Card, TextField, Button, CardContent} from '@material-ui/core';
-import {Navbar} from './navbar'
+import { Navbar } from './navbar'
+import { useDispatch, useSelector } from 'react-redux'
+import { saveNotification } from '../slices/notificationSlice'
+import { selectUserData} from '../slices/userSlice'
 
 export const NotificationForm = () => {
 
     let history = useHistory();
-    const [notificationBody, setnotificationBody] = useState('')
+    const dispatch = useDispatch()
+    const user = useSelector(selectUserData)
+    const [notificationBody, setNotificationBody] = useState('')
 
     const goToPreviousPage = () => {
         history.goBack()
@@ -16,21 +21,22 @@ export const NotificationForm = () => {
 
     const handleForm = (e) => {
         e.preventDefault();
-        setnotificationBody(e.target.value)
+        setNotificationBody(e.target.value)
 
     }
 
     const onFinish = async (e) => {
         e.preventDefault();
         const payload = {
-            sender: localStorage.getItem('userId'),
+            sender: user.userId,
             message: notificationBody
         }
          
         try {
             const response = await createNotification(payload)
+            dispatch(saveNotification(response))
             history.push('my-notifications')
-            setnotificationBody('');
+            setNotificationBody('');
         } catch (err) { console.log('Create Notification Error : ' + err)}
     }
 
@@ -54,6 +60,7 @@ export const NotificationForm = () => {
                     variant="filled"
                     multiline
                     rows={5}
+                    autoFocus
                     value={notificationBody}
                     onChange={handleForm}
                 />
@@ -72,7 +79,6 @@ export const NotificationForm = () => {
                     > Push </Button>
                 </div>
             </form>
-
         </CardContent>
         </Card>
         </div> </>

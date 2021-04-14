@@ -13,7 +13,6 @@ import { selectUserData} from '../slices/userSlice'
 export const MyPosts = () => {
 
     const user = useSelector(selectUserData)
-    // console.log(user)
     const userPosts = useSelector(state => fetchUserPosts(state, user.userId))
 
     return (<>
@@ -32,7 +31,7 @@ export const MyPosts = () => {
                     <div className="post-actions">
                         <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                         <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                        <Link to={{pathname: `/posts/${post.id}/details`}}>
+                        <Link to={{pathname: `/post-details`, pid:post.id}}>
                             <Button variant="contained" color="primary" style={{float: 'right'}}>
                                 View Post
                             </Button>

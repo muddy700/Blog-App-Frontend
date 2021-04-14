@@ -22,7 +22,6 @@ export const PostList = () => {
     const user = useSelector(selectUserData)
 
     const pullPosts = async () => {
-    
         try {
             const response = await fetchAllPosts()
             dispatch(fetchPosts(response))
@@ -77,7 +76,7 @@ export const PostList = () => {
                             {/* {post.pVotes.down.find((vote) => vote == userId )  ? <ThumbDownIcon /> : <ThumbDownOutlinedIcon /> }&nbsp; {post.pVotes.down.length} */}
                         </Button>
                         
-                        <Link to={{pathname: `/posts/${post.id}/details`}}>
+                        <Link to={{pathname: `/post-details`, pid:post.id }}>
                             <Button variant="contained" color="primary" style={{float: 'right'}}>
                                 View Post
                             </Button>

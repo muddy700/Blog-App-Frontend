@@ -3,21 +3,20 @@ import {Button} from '@material-ui/core/';
 import '../styles/posts.css'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import { Link } from "react-router-dom";
-import { useHistory, useParams, useLocation } from "react-router-dom";
-import {getSinglePost, deleteSinglePost} from '../app/api'
+import { deleteSinglePost} from '../app/api'
+import { useHistory, Link, useLocation } from "react-router-dom";
 import {Navbar} from './navbar';
 import {TimeAgo} from './timeAgo'
 import { useSelector } from 'react-redux'
 import { getPostById } from '../slices/postSlice'
+import { selectUserData } from '../slices/userSlice'
 
-export const SinglePost = ({props}) => {
+export const SinglePost = () => {
     
     let history = useHistory();
-    const { postId } = useParams()
-    // console.log(postId)
-    const singlePost = useSelector(state => getPostById(state, postId))
-    const activeUserId = localStorage.getItem('userId');
+    const location = useLocation();
+    const user = useSelector(selectUserData)
+    const singlePost = useSelector(state => getPostById(state, location.pid))
 
     const goToPreviousPage = () => {
         history.goBack()
@@ -39,9 +38,6 @@ export const SinglePost = ({props}) => {
          }
      }
 
-    useEffect(() => {
-    }, [])
-
     const {id, title, content, author_name, author, date_updated } = singlePost;
     return (<>
         <Navbar />
@@ -54,7 +50,7 @@ export const SinglePost = ({props}) => {
                  <div className="post-actions">
                     <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
                     <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
-                    {author == activeUserId ? <>
+                    {author === user.userId ? <>
                     <Button 
                         variant="contained" 
                         color="secondary" 
@@ -62,7 +58,7 @@ export const SinglePost = ({props}) => {
                         style={{float: 'right', margin: '0 5px'}}>
                         Delete
                     </Button>
-                    <Link to={{pathname: `/posts/${id}/edit`}}>
+                    <Link to={{pathname: "/edit-post", pid:id, title, content}}>
                         <Button variant="contained" color="primary" style={{float: 'right', margin: '0 5px'}}>
                             Edit
                         </Button>

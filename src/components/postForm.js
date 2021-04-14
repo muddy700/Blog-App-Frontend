@@ -1,27 +1,41 @@
 import {React, useState, useEffect} from 'react'
 import '../styles/notifications.css'
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, Redirect, useLocation } from "react-router-dom";
 import {createPost, updatePost} from '../app/api'
 import {getSinglePost} from '../app/api'
 import {Card, TextField, Button, CardContent} from '@material-ui/core';
 import { Navbar } from './navbar';
 import {useDispatch} from 'react-redux'
-import {savePost } from '../slices/postSlice'
+import { savePost, postUpdated } from '../slices/postSlice'
+import { selectUserData} from '../slices/userSlice'
+import { useSelector } from 'react-redux';
+import '../App.css'
 
 export const PostForm = () => {
 
     let history = useHistory();
+    const location = useLocation();
     const dispatch = useDispatch()
+    const user = useSelector(selectUserData)
 
-    const {id} = useParams()
+    const { pid } = location
     const initialPost = {
         title: '',
         content: ''
     }
-    const [postInfo, setPostInfo] = useState(initialPost)
+    const activePost = {
+        title: location.title,
+        content: location.content
+    }
+    const [postInfo, setPostInfo] = useState(pid ? activePost : initialPost)
 
     const goToPreviousPage = () => {
-        history.goBack()
+        if (pid) {
+            history.push({pathname: '/post-details', pid: pid})
+        }
+        else {
+            history.goBack()
+        }
         setPostInfo(initialPost)
     }
 
@@ -32,45 +46,28 @@ export const PostForm = () => {
         })
     }
 
-    const fetchSinglePost = async (postId) => {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
-            }
-        };
-
-        try {
-            const postData = await getSinglePost(postId, config)
-            setPostInfo(postData)
-        } catch (err) {
-            console.log('Single Post Error : ' + err)
-        }
-    }
-
-    useEffect(() => {
-        fetchSinglePost(id);
-    }, [])
-
     const onFinish = async (e) => {
         e.preventDefault();
         const payload = {
-            author: localStorage.getItem('userId'),
+            author: user.userId,
             title: postInfo.title,
             content: postInfo.content,
         }
         
         try {
             let response;
-            if (id) {
-                response = await updatePost(id, payload)
+            if (pid) {
+                response = await updatePost(pid, payload)
+                dispatch(postUpdated(response))
+                history.push({pathname: '/post-details', pid: response.id})
             }
             else {
                 response = await createPost(payload)
-                dispatch(savePost(payload))
+                dispatch(savePost(response))
+                history.push({pathname: '/post-details', pid: response.id})
+                // goToPreviousPage();
             }
             setPostInfo(initialPost)
-            goToPreviousPage();
         } catch (err) {
             console.log('Create Or Update Post Error : ' + err)
         }
@@ -107,9 +104,10 @@ export const PostForm = () => {
                     value={postInfo.content}
                     onChange={handlePostForm}
                 />
-                <div style={{display: 'flex'}}>
-                <Button variant="contained"
-                    onClick={goToPreviousPage} color="secondary" style={{width: '40%', marginTop: 20}}>
+                <div style={{ display: 'flex' }}>
+                            <Button variant="contained"
+                                onClick={goToPreviousPage}
+                    color="secondary" style={{width: '40%', marginTop: 20}}>
                     Cancel
                 </Button>
                 <Button 
@@ -119,7 +117,7 @@ export const PostForm = () => {
                     color="primary" 
                     className="form-input"
                     disabled={!IsFormValid} 
-                    > {id ? "Update" : "Post"}</Button>
+                    > {pid ? "Update" : "Post"}</Button>
                 </div>
             </form>
 

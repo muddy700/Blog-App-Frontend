@@ -1,14 +1,16 @@
-import {React, useState, useEffect} from 'react'
+import {React, useEffect} from 'react'
 import '../styles/notifications.css'
 import {fetchAllNotifications} from '../app/api';
 import {Navbar} from './navbar'
-import {TimeAgo} from './timeAgo'
+import { TimeAgo } from './timeAgo'
+import {useSelector, useDispatch}  from 'react-redux'
+import { fetchNotifications, selectNotificationList } from '../slices/notificationSlice'
 
 export const Notifications = () => {
-    const [showCloser, setShowCloser] = useState(false)
-    const [notifications, setNotifications] = useState([])
+    const dispatch = useDispatch()
+    const notifications = useSelector(selectNotificationList)
 
-    const fetchNotifications = async () => {
+    const pullNotifications = async () => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -16,12 +18,12 @@ export const Notifications = () => {
 
     try {
         const response = await fetchAllNotifications(config)
-        setNotifications(response)
+        dispatch(fetchNotifications(response))
     } catch (err) { console.log('Notifications Error : ' + err)}
 }
 
     useEffect(() => {
-        fetchNotifications();
+        pullNotifications();
     }, [])
 
 

@@ -41,7 +41,7 @@ export const App = () => {
             <PrivateRoute exact path="/profile"
               component={Profile}>
             </PrivateRoute>
-            <PrivateRoute exact path="/posts/:postId/details"
+            <PrivateRoute exact path="/post-details"
               component={SinglePost} >
             </PrivateRoute>
             <Route exact path="/notifications">
@@ -50,16 +50,13 @@ export const App = () => {
             <PrivateRoute exact path="/my-notifications"
               component={MyNotifications} >
             </PrivateRoute>
-            <PrivateRoute exact path={["/posts/:id/edit", "/post-form"]}
+            <PrivateRoute exact path={["/edit-post", "/post-form"]}
               component={PostForm} >
             </PrivateRoute>
             <PrivateRoute exact path="/notification-form"
               component={NotificationForm}>
             </PrivateRoute>
-            <Route exact path="/blog/home">
-              <PostList/>
-            </Route>
-            <Route exact path="/">
+            <Route exact path={["/blog/home", "/"]}>
               <PostList/>
             </Route>
             <Route path="*">

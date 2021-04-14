@@ -3,48 +3,38 @@ import '../styles/notifications.css'
 import {Button} from '@material-ui/core/';
 import { Link } from "react-router-dom";
 import {Navbar} from './navbar'
-import {fetchUserNotifications, deleteSingleNotification} from '../app/api';
-import {TimeAgo} from './timeAgo'
+import { deleteSingleNotification} from '../app/api';
+import { TimeAgo } from './timeAgo'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchUserNotifications, deleteNotification } from '../slices/notificationSlice'
+import { selectUserData} from '../slices/userSlice'
 
 export const MyNotifications = () => {
     const [showCloser, setShowCloser] = useState(false)
-    const [userNotifications, setUserNotifications] = useState([])
+    const user = useSelector(selectUserData)
+    const dispatch = useDispatch()
 
-    const pullUserNotifications = async () => {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
-            }
-        };
+    const userNotifications = useSelector(state =>
+        fetchUserNotifications(state, user.userId))
 
-        try {
-            const response = await fetchUserNotifications(config)
-            setUserNotifications(response)
-        } catch (err) {
-            console.log('User Notifications Error : ' + err)
-        }
-    }
-
-
-     const deleteNotification = async (id) => {
+     const removeNotification = async (id) => {
          const config = {
              headers: {
                  'Content-Type': 'application/json',
-                 'Authorization': `Token ${localStorage.getItem('token')}`
+                 'Authorization': `Token ${user.token}`
              }
          };
 
+         const id2 = id;
          try {
              const response = await deleteSingleNotification(id, config)
-             setUserNotifications(userNotifications.filter((item) => item.id !== id))
+             dispatch(deleteNotification(id2))
          } catch (err) {
              console.log('Delete Notification Error : ' + err)
          }
      }
    
     useEffect(() => {
-        pullUserNotifications();
     }, [])
 
 
@@ -61,7 +51,7 @@ export const MyNotifications = () => {
                     onMouseLeave={e => {e.preventDefault(); setShowCloser(false)}}>
                     <button className="notification-closer" 
                         hidden={!showCloser}
-                        onClick={e =>{e.preventDefault(); deleteNotification(id)}}>x</button>
+                        onClick={e =>{e.preventDefault(); removeNotification(id)}}>x</button>
                     <p><b>{sender_name} </b> {message}</p> 
                     <TimeAgo timestamp={date_created} />
                     
