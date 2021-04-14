@@ -3,7 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 import '../App.css'
 import {authenticateUser} from '../app/api'
 import {getUserInfo} from '../app/api'
-
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,14 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
 import {useDispatch} from 'react-redux'
 import { saveUser } from '../slices/userSlice'
-
-// import Backdrop from '@material-ui/core/Backdrop';
-// import CircularProgress from '@material-ui/core/CircularProgress';
-
-
 
 function Copyright() {
   return (
@@ -141,6 +134,9 @@ export const LoginPage = () => {
               email: profile.email
             }))
             localStorage.setItem('token', response.token);
+            localStorage.setItem('id', profile.id);
+            localStorage.setItem('name', profile.username);
+            localStorage.setItem('email', profile.email);
             localStorage.setItem('isLoggedIn', true);
             history.push("/blog/home")
           } catch (err) { console.log('Profile Error : ' + err) }

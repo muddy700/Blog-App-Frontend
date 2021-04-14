@@ -12,15 +12,14 @@ const postSlice = createSlice({
                 state.postList.push(action.payload)
             },
         postUpdated: (state, action) => {
-            state.postList.map((post) => {
-                if (post.id === action.payload.id) {
-                        return action.payload
-                }
-                else { return post}
-                })
+            state.postList.map((post) => post.id === action.payload.id ?
+                action.payload : post)
             },
             fetchPosts: (state, action) => {
                 state.postList = action.payload
+            },
+            deletePost: (state, action) => {
+                state.postList = state.postList.filter((post) => post.id !== action.payload)
             },
         }
     });
@@ -32,7 +31,7 @@ export const fetchUserPosts = (state, uid) => {
 export const getPostById = (state, pid) => {
     return state.posts.postList.find((post) => post.id === pid) }
         
-export const { savePost, fetchPosts, postUpdated } = postSlice.actions
+export const { savePost, fetchPosts, postUpdated, deletePost } = postSlice.actions
 export const selectPostList = state => state.posts.postList
 // export const selectUserPosts = state => state.posts.postList
 export default postSlice.reducer

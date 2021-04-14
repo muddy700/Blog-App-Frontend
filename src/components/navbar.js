@@ -1,29 +1,33 @@
 import React from 'react'
 import '../styles/navbar.css'
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Tooltip from '@material-ui/core/Tooltip';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { logoutUser } from '../app/api'
-import {FeedBack} from './feedBackCard'
+import { FeedBack } from './feedBackCard'
+import {useSelector} from 'react-redux'
+import { selectUserData } from '../slices/userSlice'
 
 export const Navbar = ({message, type, status}) => {
     const history = useHistory();
-    const location= useLocation();
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const user = useSelector(selectUserData)
+    const isLoggedIn = user.isAuthenticated
 
     const endSession = async () => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                'Authorization': `Token ${user.token}`
             }
         };
 
         try {
             // const response = await logoutUser(config)
             localStorage.removeItem('token');
-            localStorage.removeItem('userId');
+            localStorage.removeItem('id');
+            localStorage.removeItem('name');
+            localStorage.removeItem('email');
             localStorage.removeItem('isLoggedIn');
             history.push("/blog/home")
         } catch (err) { console.log('Logout Error : ' + err) }

@@ -1,8 +1,7 @@
-import {React, useState, useEffect} from 'react'
+import {React, useState} from 'react'
 import '../styles/notifications.css'
-import { useHistory, Redirect, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import {createPost, updatePost} from '../app/api'
-import {getSinglePost} from '../app/api'
 import {Card, TextField, Button, CardContent} from '@material-ui/core';
 import { Navbar } from './navbar';
 import {useDispatch} from 'react-redux'
@@ -59,12 +58,14 @@ export const PostForm = () => {
             if (pid) {
                 response = await updatePost(pid, payload)
                 dispatch(postUpdated(response))
-                history.push({pathname: '/post-details', pid: response.id})
+                history.push({pathname: '/'})
+                // history.push({pathname: '/post-details', pid})
             }
             else {
                 response = await createPost(payload)
                 dispatch(savePost(response))
-                history.push({pathname: '/post-details', pid: response.id})
+                history.push({pathname: '/'})
+                // history.push({pathname: '/post-details', pid: response.id})
                 // goToPreviousPage();
             }
             setPostInfo(initialPost)

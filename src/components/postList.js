@@ -5,7 +5,7 @@ import '../styles/posts.css'
 // import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {fetchAllPosts, getUserInfo } from '../app/api';
 import {Navbar} from './navbar';
 import { TimeAgo } from './timeAgo'
@@ -18,8 +18,7 @@ export const PostList = () => {
  
     const postList = useSelector(selectPostList)
     const dispatch = useDispatch();
-    const history = useHistory();
-    const user = useSelector(selectUserData)
+    // const user = useSelector(selectUserData)
 
     const pullPosts = async () => {
         try {
@@ -28,32 +27,8 @@ export const PostList = () => {
         } catch (err) { console.log('Posts Error : ' + err)}
     }
 
-    const pullUserData = async () => {
-        const config2 = {
-                    headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${user.token}`
-                    }
-                };
-    
-        try {
-        const profile = await getUserInfo(config2)
-        dispatch(saveUser({
-            token: user.token,
-            isAuthenticated: true,
-            userId: profile.id,
-            username: profile.username,
-            email: profile.email
-        }))
-        localStorage.setItem('isLoggedIn', true);
-        } catch (err) { console.log('Profile Error : ' + err) }
-    }
-
-    
-
     useEffect(() => {
         pullPosts();
-        pullUserData();
     }, [])
 
     return (<>

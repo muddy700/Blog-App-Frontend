@@ -1,4 +1,4 @@
-import {React, useState, useEffect} from 'react'
+import {React} from 'react'
 import {Button} from '@material-ui/core/';
 import '../styles/posts.css'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
@@ -7,14 +7,15 @@ import { deleteSinglePost} from '../app/api'
 import { useHistory, Link, useLocation } from "react-router-dom";
 import {Navbar} from './navbar';
 import {TimeAgo} from './timeAgo'
-import { useSelector } from 'react-redux'
-import { getPostById } from '../slices/postSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { getPostById, deletePost } from '../slices/postSlice'
 import { selectUserData } from '../slices/userSlice'
 
 export const SinglePost = () => {
     
     let history = useHistory();
     const location = useLocation();
+    const dispatch = useDispatch()
     const user = useSelector(selectUserData)
     const singlePost = useSelector(state => getPostById(state, location.pid))
 
@@ -22,23 +23,27 @@ export const SinglePost = () => {
         history.goBack()
     }
 
-     const deletePost = async (id) => {
+     const removePost = async (id2) => {
          const config = {
              headers: {
                  'Content-Type': 'application/json',
-                 'Authorization': `Token ${localStorage.getItem('token')}`
+                 'Authorization': `Token ${user.token}`
              }
          };
 
+         const pid2 = id2;
          try {
-             const response = await deleteSinglePost(id, config)
+             const response = await deleteSinglePost(id2, config)
+             console.log(response.date_joined)
              history.push('/my-posts')
+             dispatch(deletePost(pid2))
          } catch (err) {
              console.log('Delete Post Error : ' + err)
          }
-     }
-
-    const {id, title, content, author_name, author, date_updated } = singlePost;
+    }
+    
+    const { id, title, content, author_name, author, date_updated } = singlePost ? singlePost : ''
+    
     return (<>
         <Navbar />
         <div className="posts-container">
@@ -54,7 +59,7 @@ export const SinglePost = () => {
                     <Button 
                         variant="contained" 
                         color="secondary" 
-                        onClick={e => {e.preventDefault(); deletePost(id)}}
+                        onClick={e => {e.preventDefault(); removePost(id)}}
                         style={{float: 'right', margin: '0 5px'}}>
                         Delete
                     </Button>

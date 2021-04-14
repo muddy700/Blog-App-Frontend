@@ -28,6 +28,7 @@ export const MyNotifications = () => {
          const id2 = id;
          try {
              const response = await deleteSingleNotification(id, config)
+             console.log(response)
              dispatch(deleteNotification(id2))
          } catch (err) {
              console.log('Delete Notification Error : ' + err)

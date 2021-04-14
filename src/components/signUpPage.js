@@ -141,6 +141,7 @@ export const SignUpPage = () => {
       if (validation) {
         try {
           const response = await createUser(signUpCredentials)
+          console.log(response)
           setSignUpCredentials(credentials)
           history.push("/login")
         } catch (err) { console.log('Sign Up Error : ' + err) }
