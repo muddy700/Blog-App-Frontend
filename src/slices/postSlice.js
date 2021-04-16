@@ -11,9 +11,9 @@ const postSlice = createSlice({
             savePost: (state, action) => {
                 state.postList.push(action.payload)
             },
-        postUpdated: (state, action) => {
-            state.postList.map((post) => post.id === action.payload.id ?
-                action.payload : post)
+            postUpdated: (state, action) => {
+                state.postList.map((post) => post.id === action.payload.id ?
+                    action.payload : post)
             },
             fetchPosts: (state, action) => {
                 state.postList = action.payload

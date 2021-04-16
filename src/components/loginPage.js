@@ -13,7 +13,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { saveUser, apiConfigurations } from '../slices/userSlice'
 
 function Copyright() {
@@ -60,18 +62,18 @@ export const LoginPage = () => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch()
-  const config = useSelector(apiConfigurations)
 
-    const credentials = {
-        username: '',
-        password: ''
-    }
+  const credentials = {
+      username: '',
+      password: ''
+  }
 
     const [loginCredentials, setLoginCredentials] = useState(credentials)
     const [usernameError, setUsernameError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
     const [usernameErrorMessage, setUsernameErrorMessage] = useState('')
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+  const [openBackDrop, setOpenBackDrop] = useState(false)
 
     const handleLoginCredentials = (e) => {
         e.preventDefault()
@@ -111,6 +113,7 @@ export const LoginPage = () => {
 
     const onFinish = async (e) => {
       e.preventDefault()
+      // setOpenBackDrop(true)
       const validation = formValidator(e);
       const config1 = { headers: { 'Content-Type': 'application/json'} };
        
@@ -137,17 +140,23 @@ export const LoginPage = () => {
             localStorage.setItem('token', response.token);
             localStorage.setItem('isLoggedIn', true);
             history.push("/")
+            setOpenBackDrop(false);
           } catch (err) {
             console.log('Profile Error : ' + err)
-          console.log(config)}
+            // setOpenBackDrop(false)
+          }
         }
         catch (err) {
+          setOpenBackDrop(false)
           setUsernameError(true)
           setUsernameErrorMessage('Incorrect username Or Password')
           console.log('Login Error : ' + err)
         }
       }
-      else { console.log('Login Form Is Invalid')}
+      else {
+        console.log('Login Form Is Invalid')
+        setOpenBackDrop(false)
+      }
       }
           
     return (
@@ -211,12 +220,12 @@ export const LoginPage = () => {
             <Box mt={8}>
                 <Copyright />
             </Box>
-            {/* <Backdrop 
+            <Backdrop 
                 className={classes.backdrop} 
                 open={openBackDrop} 
                 >
                 <CircularProgress color="inherit" />
-            </Backdrop> */}
+            </Backdrop>
     </Container> )
         }
 export default LoginPage

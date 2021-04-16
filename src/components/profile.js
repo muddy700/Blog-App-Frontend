@@ -22,7 +22,7 @@ large: {
   },
 }));
 
-export const Profile = () => {
+export const Profile = ({pullUserData}) => {
     const classes = useStyles();
     let history = useHistory();
     const user = useSelector(selectUserData)
