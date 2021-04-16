@@ -24,6 +24,7 @@ import {
 } from "react-router-dom";
 import PostForm from './components/postForm';
 import NotificationForm from './components/notificationForm';
+// "proxy": "https://clever-blog-app.herokuapp.com"
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -62,6 +63,9 @@ export const App = () => {
       pullUserData();
       pullNotifications();
     }, [])
+    useEffect(() => {
+      pullUserData();
+    }, [user.token])
   
   return (
     <Router>

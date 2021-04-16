@@ -135,9 +135,7 @@ export const LoginPage = () => {
               email: profile.email
             }))
             localStorage.setItem('token', response.token);
-            localStorage.setItem('id', profile.id);
-            localStorage.setItem('name', profile.username);
-            localStorage.setItem('email', profile.email);
+            localStorage.setItem('isLoggedIn', true);
             history.push("/")
           } catch (err) {
             console.log('Profile Error : ' + err)
