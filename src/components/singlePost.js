@@ -9,7 +9,7 @@ import {Navbar} from './navbar';
 import {TimeAgo} from './timeAgo'
 import { useSelector, useDispatch } from 'react-redux'
 import { getPostById, deletePost } from '../slices/postSlice'
-import { selectUserData } from '../slices/userSlice'
+import { selectUserData, apiConfigurations } from '../slices/userSlice'
 
 export const SinglePost = () => {
     
@@ -18,28 +18,22 @@ export const SinglePost = () => {
     const dispatch = useDispatch()
     const user = useSelector(selectUserData)
     const singlePost = useSelector(state => getPostById(state, location.pid))
+    const config = useSelector(apiConfigurations)
 
     const goToPreviousPage = () => {
         history.goBack()
     }
 
-     const removePost = async (id2) => {
-         const config = {
-             headers: {
-                 'Content-Type': 'application/json',
-                 'Authorization': `Token ${user.token}`
-             }
-         };
-
-         const pid2 = id2;
-         try {
-             const response = await deleteSinglePost(id2, config)
-             console.log(response.date_joined)
-             history.push('/my-posts')
-             dispatch(deletePost(pid2))
-         } catch (err) {
-             console.log('Delete Post Error : ' + err)
-         }
+    const removePost = async (id2) => {
+        const pid2 = id2;
+        try {
+            const response = await deleteSinglePost(id2, config)
+            console.log(response.date_joined)
+            history.push('/my-posts')
+            dispatch(deletePost(pid2))
+        } catch (err) {
+            console.log('Delete Post Error : ' + err)
+        }
     }
     
     const { id, title, content, author_name, author, date_updated } = singlePost ? singlePost : ''

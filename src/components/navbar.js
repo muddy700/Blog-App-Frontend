@@ -6,29 +6,30 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { logoutUser } from '../app/api'
 import { FeedBack } from './feedBackCard'
-import {useSelector} from 'react-redux'
-import { selectUserData } from '../slices/userSlice'
+import {useSelector, useDispatch} from 'react-redux'
+import { selectUserData, saveUser, apiConfigurations } from '../slices/userSlice'
 
 export const Navbar = ({message, type, status}) => {
     const history = useHistory();
     const user = useSelector(selectUserData)
+    const dispatch = useDispatch()
     const isLoggedIn = user.isAuthenticated
+    const config = useSelector(apiConfigurations)
 
     const endSession = async () => {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${user.token}`
-            }
-        };
-
         try {
             // const response = await logoutUser(config)
             localStorage.removeItem('token');
             localStorage.removeItem('id');
             localStorage.removeItem('name');
             localStorage.removeItem('email');
-            localStorage.removeItem('isLoggedIn');
+            dispatch(saveUser({
+              token: '',
+              isAuthenticated: false,
+              userId: '',
+              username: '',
+              email: ''
+            }))
             history.push("/blog/home")
         } catch (err) { console.log('Logout Error : ' + err) }
     }
@@ -36,7 +37,7 @@ export const Navbar = ({message, type, status}) => {
     return (<>
             <nav class="navbar navbar-expand-sm navbar-dark bg-dark" style={{width: '100%'}}>
                 <div class="container-fluid">
-                    <Link to="/blog/home" class="navbar-brand h1">Blog App</Link>
+                    <Link to="/" class="navbar-brand h1">Blog App</Link>
                     <button 
                         class="navbar-toggler" 
                         type="button" 
@@ -50,7 +51,7 @@ export const Navbar = ({message, type, status}) => {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <Link to="/blog/home" class="nav-link active" aria-current="page" >Home</Link>
+                            <Link to="/" class="nav-link active" aria-current="page" >Home</Link>
                         </li>
                         <li class="nav-item">
                             <Link to="/notifications" class="nav-link">Notifications</Link>
@@ -59,7 +60,6 @@ export const Navbar = ({message, type, status}) => {
                             <span
                             class="nav-link dropdown-toggle" 
                             data-bs-toggle="dropdown" 
-                            // href="#" role="button" 
                             aria-expanded="false">My Activities</span>
                             <ul class="dropdown-menu">
                                 <li><Link to="/my-posts" class="dropdown-item">My Posts</Link></li>
@@ -67,7 +67,7 @@ export const Navbar = ({message, type, status}) => {
                             </ul>
                         </li>
                     </ul>
-                        {isLoggedIn ? <>
+                    {isLoggedIn ? <>
                         <button class="btn btn-info" style={{backgroundColor: 'inherit', border: 'none'}}>
                         <Tooltip title="Account" arrow> 
                             <Link to="/profile" >
@@ -82,7 +82,8 @@ export const Navbar = ({message, type, status}) => {
                             <Tooltip title="Logout" arrow> 
                                     <PowerSettingsNewIcon fontSize="large" />
                             </Tooltip>
-                            </button> </> : <>
+                        </button>
+                    </> : <>
                             <Link to="/sign-up" className="links">
                                 <button class="btn btn-outline-primary"  
                                     style={{backgroundColor: 'inherit', border: 'none'}}> Register
@@ -93,12 +94,11 @@ export const Navbar = ({message, type, status}) => {
                                     style={{backgroundColor: 'inherit', border: 'none'}}> LogIn
                                 </button> 
                             </Link> </>
-                         }
+                     }
                     </div>
                 </div>
             </nav>
         <FeedBack message={message} type={type} status={status} />
-        {/* <p>{Location.pathname} here</p> */}
             </>
     )
 }

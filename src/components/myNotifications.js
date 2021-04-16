@@ -7,24 +7,18 @@ import { deleteSingleNotification} from '../app/api';
 import { TimeAgo } from './timeAgo'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchUserNotifications, deleteNotification } from '../slices/notificationSlice'
-import { selectUserData} from '../slices/userSlice'
+import { selectUserData, apiConfigurations} from '../slices/userSlice'
 
 export const MyNotifications = () => {
     const [showCloser, setShowCloser] = useState(false)
     const user = useSelector(selectUserData)
     const dispatch = useDispatch()
+    const config = useSelector(apiConfigurations)
 
     const userNotifications = useSelector(state =>
         fetchUserNotifications(state, user.userId))
 
      const removeNotification = async (id) => {
-         const config = {
-             headers: {
-                 'Content-Type': 'application/json',
-                 'Authorization': `Token ${user.token}`
-             }
-         };
-
          const id2 = id;
          try {
              const response = await deleteSingleNotification(id, config)
@@ -35,30 +29,35 @@ export const MyNotifications = () => {
          }
      }
    
-    useEffect(() => {
-    }, [])
-
-
     return (<>
         <Navbar />
         <Link to="/notification-form" className="links">
             <Button color="primary" variant="contained">Add Notification</Button>
         </Link>
-        <div className="notifications-container">
-            {userNotifications.slice().sort((a, b) => b.date_created.localeCompare(a.date_created))
-            .map(({id, sender_name, message, date_created}) => 
-                <div className="notification-card" key={id}
-                    onMouseOver={e => {e.preventDefault(); setShowCloser(true)}}
-                    onMouseLeave={e => {e.preventDefault(); setShowCloser(false)}}>
-                    <button className="notification-closer" 
-                        hidden={!showCloser}
-                        onClick={e =>{e.preventDefault(); removeNotification(id)}}>x</button>
-                    <p><b>{sender_name} </b> {message}</p> 
-                    <TimeAgo timestamp={date_created} />
+        {userNotifications.length ?
+            <div className="notifications-container">
+                {userNotifications.slice().sort((a, b) => b.date_created.localeCompare(a.date_created))
+                    .map(({ id, sender_name, message, date_created }) =>
+                        <div className="notification-card" key={id}
+                            onMouseOver={e => { e.preventDefault(); setShowCloser(true) }}
+                            onMouseLeave={e => { e.preventDefault(); setShowCloser(false) }}>
+                            <button className="notification-closer"
+                                hidden={!showCloser}
+                                onClick={e => { e.preventDefault(); removeNotification(id) }}>x</button>
+                            <p><b>{sender_name} </b> {message}</p>
+                            <TimeAgo timestamp={date_created} />
                     
-                </div>
-            )}
-        </div> </>
+                        </div>
+                    )}
+            </div> :
+            <div className="notification-card">
+                <p>
+                    You Don't Have Any Notification Yet.
+                    Click The Button Above To Add
+                </p>
+            </div>
+        }
+         </>
     )
 }
 

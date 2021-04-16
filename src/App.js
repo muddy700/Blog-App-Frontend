@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 import './App.css';
 import {PostList } from './components/postList'
 import {MyPosts } from './components/myPosts'
@@ -11,6 +11,11 @@ import ForgotPasswordPage from './components/forgotPasswordPage';
 import Profile from './components/profile';
 import SinglePost from './components/singlePost';
 import MyNotifications from './components/myNotifications';
+import { fetchAllPosts, getUserInfo, fetchAllNotifications } from './app/api';
+import { fetchPosts } from './slices/postSlice'
+import { saveUser, selectUserData, apiConfigurations } from './slices/userSlice'
+import { useSelector, useDispatch}  from 'react-redux'
+import { fetchNotifications } from './slices/notificationSlice'
 
 import {
     BrowserRouter as Router,
@@ -21,6 +26,43 @@ import PostForm from './components/postForm';
 import NotificationForm from './components/notificationForm';
 
 export const App = () => {
+  const dispatch = useDispatch();
+  const user = useSelector(selectUserData)
+  const config = useSelector(apiConfigurations)
+  
+    const pullUserData = async () => {
+      try {
+      const profile = await getUserInfo(config)
+      dispatch(saveUser({
+          token: user.token,
+          isAuthenticated: true,
+          userId: profile.id,
+          username: profile.username,
+          email: profile.email
+      }))
+      } catch (err) { console.log('Profile Error : ' + err) }
+    }
+   
+    const pullPosts = async () => {
+      try {
+          const response = await fetchAllPosts()
+          dispatch(fetchPosts(response))
+      } catch (err) { console.log('Posts Error : ' + err)}
+    }
+
+    const pullNotifications = async () => {
+      try {
+          const response = await fetchAllNotifications(config)
+          dispatch(fetchNotifications(response))
+      } catch (err) { console.log('Notifications Error : ' + err)}
+}
+
+    useEffect(() => {
+      pullPosts();
+      pullUserData();
+      pullNotifications();
+    }, [])
+  
   return (
     <Router>
       <div className="app">

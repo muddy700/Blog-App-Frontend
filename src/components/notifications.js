@@ -1,34 +1,14 @@
-import {React, useEffect} from 'react'
+import {React} from 'react'
 import '../styles/notifications.css'
-import {fetchAllNotifications} from '../app/api';
 import {Navbar} from './navbar'
 import { TimeAgo } from './timeAgo'
-import {useSelector, useDispatch}  from 'react-redux'
-import { fetchNotifications, selectNotificationList } from '../slices/notificationSlice'
+import {useSelector}  from 'react-redux'
+import { selectNotificationList } from '../slices/notificationSlice'
 
 export const Notifications = () => {
-    const dispatch = useDispatch()
     const notifications = useSelector(selectNotificationList)
 
-    const pullNotifications = async () => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${localStorage.getItem('token')}` } };
-
-    try {
-        const response = await fetchAllNotifications(config)
-        dispatch(fetchNotifications(response))
-    } catch (err) { console.log('Notifications Error : ' + err)}
-}
-
-    useEffect(() => {
-        pullNotifications();
-    }, [])
-
-
     return (
-        // <div className="internal-card">
         <>
         <Navbar />
         <div className="notifications-container">
@@ -39,7 +19,6 @@ export const Notifications = () => {
                     <TimeAgo timestamp={date_created} />
                 </div>
             )}
-            {/* </div> */}
         </div></>
     )
 }

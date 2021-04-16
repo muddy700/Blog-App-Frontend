@@ -20,6 +20,15 @@ const userSlice = createSlice({
     }
 });
 
+export const apiConfigurations = () => {
+    return {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${localStorage.getItem('token')}`
+        }
+    }
+}
+
 export const { saveUser } = userSlice.actions
 export const selectUserData = state => state.user.userData
 export default userSlice.reducer

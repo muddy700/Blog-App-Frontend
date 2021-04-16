@@ -13,8 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {useDispatch} from 'react-redux'
-import { saveUser } from '../slices/userSlice'
+import {useDispatch, useSelector} from 'react-redux'
+import { saveUser, apiConfigurations } from '../slices/userSlice'
 
 function Copyright() {
   return (
@@ -60,6 +60,7 @@ export const LoginPage = () => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch()
+  const config = useSelector(apiConfigurations)
 
     const credentials = {
         username: '',
@@ -111,19 +112,19 @@ export const LoginPage = () => {
     const onFinish = async (e) => {
       e.preventDefault()
       const validation = formValidator(e);
-      const config = { headers: { 'Content-Type': 'application/json'} };
+      const config1 = { headers: { 'Content-Type': 'application/json'} };
        
       if (validation) {
         try {
-          const response = await authenticateUser(loginCredentials, config)
+          const response = await authenticateUser(loginCredentials, config1)
           setLoginCredentials(credentials)
+          console.log('authenticated')
           const config2 = {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${response.token}`
-            }
-          };
-    
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Token ${response.token}`
+              }
+          }
           try {
             const profile = await getUserInfo(config2)
             dispatch(saveUser({
@@ -137,9 +138,10 @@ export const LoginPage = () => {
             localStorage.setItem('id', profile.id);
             localStorage.setItem('name', profile.username);
             localStorage.setItem('email', profile.email);
-            localStorage.setItem('isLoggedIn', true);
-            history.push("/blog/home")
-          } catch (err) { console.log('Profile Error : ' + err) }
+            history.push("/")
+          } catch (err) {
+            console.log('Profile Error : ' + err)
+          console.log(config)}
         }
         catch (err) {
           setUsernameError(true)
