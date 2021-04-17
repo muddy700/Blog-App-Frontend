@@ -63,9 +63,6 @@ export const App = () => {
       pullUserData();
       pullNotifications();
     }, [])
-    useEffect(() => {
-      pullUserData();
-    }, [user.token])
   
   return (
     <Router>

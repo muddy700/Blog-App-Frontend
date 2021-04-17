@@ -26,12 +26,12 @@ export const MyPosts = () => {
                     .map((post) => (
                         <div className="post-card" key={post.id}>
                             <h5>{post.title}</h5>
-                            <p>By <b>{post.author_name}</b>
+                            <p>By <b>{post.author_name === user.username ? 'You' : post.author_name}</b>
                                 <TimeAgo timestamp={post.date_updated} /></p>
                             <p className="post-body">{post.content} </p>
                             <div className="post-actions">
-                                <Button color="primary"><ThumbUpIcon /> &nbsp; 12</Button>
-                                <Button color="primary"><ThumbDownIcon />&nbsp; 5</Button>
+                                <Button color="primary"><ThumbUpIcon /> &nbsp; {post.id * 3}</Button>
+                                <Button color="primary"><ThumbDownIcon />&nbsp; {post.id * 2}</Button>
                                 <Link to={{ pathname: `/post-details`, pid: post.id }}>
                                     <Button variant="contained" color="primary" style={{ float: 'right' }}>
                                         View Post

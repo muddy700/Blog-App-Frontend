@@ -44,7 +44,9 @@ export const MyNotifications = () => {
                             <button className="notification-closer"
                                 hidden={!showCloser}
                                 onClick={e => { e.preventDefault(); removeNotification(id) }}>x</button>
-                            <p><b>{sender_name} </b> {message}</p>
+                            <p>From
+                                <b>{sender_name === user.username ? 'You' : sender_name} </b>
+                                <br /> {message}</p>
                             <TimeAgo timestamp={date_created} />
                     
                         </div>
