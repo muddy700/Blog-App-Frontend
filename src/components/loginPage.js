@@ -138,7 +138,6 @@ export const LoginPage = () => {
               email: profile.email
             }))
             localStorage.setItem('token', response.token);
-            localStorage.setItem('isLoggedIn', true);
             history.push("/")
             setOpenBackDrop(false);
           } catch (err) {

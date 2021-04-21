@@ -6,7 +6,7 @@ const initialState = {
         username: '',
         email: '',
         token: localStorage.getItem('token'),
-        isAuthenticated: localStorage.getItem('isLoggedIn'),
+        isAuthenticated: false,
     }
 }
 

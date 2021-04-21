@@ -1,4 +1,4 @@
-import {React, useEffect} from 'react';
+import {React, useEffect, useState} from 'react';
 import './App.css';
 import {PostList } from './components/postList'
 import {MyPosts } from './components/myPosts'
@@ -30,10 +30,18 @@ export const App = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUserData)
   const config = useSelector(apiConfigurations)
+  const [isLoading, setIsLoading] = useState(false)
   
-    const pullUserData = async () => {
+  const pullUserData = async () => {
+    setIsLoading(true)
+      const config2 = {
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Token ${localStorage.getItem('token')}`
+              }
+          }
       try {
-      const profile = await getUserInfo(config)
+      const profile = await getUserInfo(config2)
       dispatch(saveUser({
           token: user.token,
           isAuthenticated: true,
@@ -41,7 +49,8 @@ export const App = () => {
           username: profile.username,
           email: profile.email
       }))
-      } catch (err) { console.log('Profile Error : ' + err) }
+    } catch (err) { console.log('Profile Error : ' + err) }
+    setIsLoading(false)
     }
    
     const pullPosts = async () => {
@@ -59,8 +68,8 @@ export const App = () => {
 }
 
     useEffect(() => {
-      pullPosts();
       pullUserData();
+      pullPosts();
       pullNotifications();
     }, [])
   
@@ -68,44 +77,47 @@ export const App = () => {
     <Router>
       <div className="app">
         <div className="app-container">
-          <Switch>
-            <Route exact path="/login">
-              <LoginPage />
-            </Route>
-            <Route exact path="/sign-up">
-              <SignUpPage />
-            </Route>
-            <Route exact path="/forgot-password">
-              <ForgotPasswordPage />
-            </Route>
-            <PrivateRoute exact path="/my-posts"
-              component={MyPosts} >
-            </PrivateRoute>
-            <PrivateRoute exact path="/profile"
-              component={Profile}>
-            </PrivateRoute>
-            <PrivateRoute exact path="/post-details"
-              component={SinglePost} >
-            </PrivateRoute>
-            <Route exact path="/notifications">
-              <Notifications />
-            </Route>
-            <PrivateRoute exact path="/my-notifications"
-              component={MyNotifications} >
-            </PrivateRoute>
-            <PrivateRoute exact path={["/edit-post", "/post-form"]}
-              component={PostForm} >
-            </PrivateRoute>
-            <PrivateRoute exact path="/notification-form"
-              component={NotificationForm}>
-            </PrivateRoute>
-            <Route exact path={["/blog/home", "/"]}>
-              <PostList/>
-            </Route>
-            <Route path="*">
-              <PageNotFound />
-            </Route>
-        </Switch>
+          {isLoading ?
+             <div> Loading...</div> : 
+            <Switch>
+              <Route exact path="/login">
+                <LoginPage />
+              </Route>
+              <Route exact path="/sign-up">
+                <SignUpPage />
+              </Route>
+              <Route exact path="/forgot-password">
+                <ForgotPasswordPage />
+              </Route>
+              <PrivateRoute exact path="/my-posts"
+                component={MyPosts} >
+              </PrivateRoute>
+              <PrivateRoute exact path="/profile"
+                component={Profile}>
+              </PrivateRoute>
+              <PrivateRoute exact path="/post-details"
+                component={SinglePost} >
+              </PrivateRoute>
+              <Route exact path="/notifications">
+                <Notifications />
+              </Route>
+              <PrivateRoute exact path="/my-notifications"
+                component={MyNotifications} >
+              </PrivateRoute>
+              <PrivateRoute exact path={["/edit-post", "/post-form"]}
+                component={PostForm} >
+              </PrivateRoute>
+              <PrivateRoute exact path="/notification-form"
+                component={NotificationForm}>
+              </PrivateRoute>
+              <Route exact path={["/blog/home", "/"]}>
+                <PostList />
+              </Route>
+              <Route path="*">
+                <PageNotFound />
+              </Route>
+            </Switch> 
+             }
         </div>
       </div>
     </Router>

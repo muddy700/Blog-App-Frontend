@@ -20,7 +20,6 @@ export const Navbar = ({message, type, status}) => {
         try {
             // const response = await logoutUser(config)
             localStorage.removeItem('token');
-            localStorage.removeItem('isLoggedIn');
             dispatch(saveUser({
               token: '',
               isAuthenticated: false,
